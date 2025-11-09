@@ -23,13 +23,13 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      { path: "my-transactions", element: <MyTransactions /> },
+      { path: "transaction/:id", element: <TransactionDetails /> },
     ],
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/my-transactions", element: <MyTransactions /> },
-  { path: "/transaction/:id", element: <TransactionDetails /> },
   { path: "*", element: <h2>Error404</h2> },
 ]);
 
