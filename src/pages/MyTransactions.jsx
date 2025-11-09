@@ -118,6 +118,9 @@ const MyTransactions = () => {
                   <strong>Type:</strong> {txn.type}
                 </div>
                 <div className="text-gray-800">
+                  <strong>Description:</strong> {txn.description}
+                </div>
+                <div className="text-gray-800">
                   <strong>Category:</strong> {txn.categoryId}
                 </div>
                 <div className="text-gray-800">
@@ -165,6 +168,11 @@ const MyTransactions = () => {
             <h3 className="text-lg font-bold mb-4 text-gray-800">
               Edit Transaction
             </h3>
+            <p className="mb-2 text-sm text-gray-600">
+              You can edit/update these fields: <strong>Type</strong>,{" "}
+              <strong>Description</strong>, <strong>Category</strong>,{" "}
+              <strong>Amount</strong>, <strong>Date</strong>
+            </p>
             <form
               onSubmit={handleUpdate}
               className="edit-form grid grid-cols-1 gap-4"
@@ -183,6 +191,15 @@ const MyTransactions = () => {
                 </select>
               </label>
               <label className="text-gray-700 flex flex-col">
+                Description:
+                <input
+                  name="description"
+                  defaultValue={editTxn.description}
+                  required
+                  className="input input-bordered w-full"
+                />
+              </label>
+              <label className="text-gray-700 flex flex-col">
                 Category:
                 <input
                   name="categoryId"
@@ -197,15 +214,6 @@ const MyTransactions = () => {
                   name="amount"
                   type="number"
                   defaultValue={editTxn.amount}
-                  required
-                  className="input input-bordered w-full"
-                />
-              </label>
-              <label className="text-gray-700 flex flex-col">
-                Description:
-                <input
-                  name="description"
-                  defaultValue={editTxn.description}
                   required
                   className="input input-bordered w-full"
                 />
