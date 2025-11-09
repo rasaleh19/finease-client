@@ -8,7 +8,6 @@ const MyTransactions = () => {
   const [loading, setLoading] = useState(true);
   const [editTxn, setEditTxn] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [viewTxn, setViewTxn] = useState(null);
 
   useEffect(() => {
     async function fetchTxns() {
@@ -145,7 +144,9 @@ const MyTransactions = () => {
                   </button>
                   <button
                     className="btn btn-sm btn-info"
-                    onClick={() => setViewTxn(txn)}
+                    onClick={() =>
+                      (window.location.href = `/transaction/${txn.id}`)
+                    }
                   >
                     View Details
                   </button>
@@ -242,73 +243,6 @@ const MyTransactions = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* View Details Modal */}
-      {viewTxn && (
-        <div
-          className="modal-overlay fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
-          onClick={() => setViewTxn(null)}
-        >
-          <div
-            className="modal-content bg-white rounded-2xl shadow-lg p-8 w-1/2 min-w-[250px] max-w-2xl relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-gray-900">
-              Transaction Details
-            </h3>
-            <div className="grid grid-cols-1 gap-4 mb-6">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">Type:</span>
-                <span className="text-base text-gray-900">{viewTxn.type}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">
-                  Description:
-                </span>
-                <span className="text-base text-gray-900">
-                  {viewTxn.description}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">Category:</span>
-                <span className="text-base text-gray-900">
-                  {viewTxn.categoryId}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">Amount:</span>
-                <span className="text-base text-green-700 font-bold">
-                  ${viewTxn.amount}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">Date:</span>
-                <span className="text-base text-gray-900">{viewTxn.date}</span>
-              </div>
-              <div className="flex justify-between items-center bg-yellow-50 rounded px-2 py-1">
-                <span className="font-semibold text-gray-700">
-                  Total Amount in Category:
-                </span>
-                <span className="text-base text-blue-700 font-bold">
-                  $
-                  {transactions
-                    .filter((t) => t.categoryId === viewTxn.categoryId)
-                    .reduce((sum, t) => sum + Number(t.amount), 0)}
-                </span>
-              </div>
-            </div>
-            <div className="modal-actions flex justify-center mt-2">
-              <button
-                type="button"
-                className="btn btn-outline btn-lg px-8 py-2 rounded"
-                onClick={() => setViewTxn(null)}
-              >
-                Close
-              </button>
-            </div>
           </div>
         </div>
       )}
