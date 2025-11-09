@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const MyTransactions = () => {
   const { user } = useContext(AuthContext);
@@ -8,6 +9,7 @@ const MyTransactions = () => {
   const [loading, setLoading] = useState(true);
   const [editTxn, setEditTxn] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchTxns() {
@@ -144,9 +146,7 @@ const MyTransactions = () => {
                   </button>
                   <button
                     className="btn btn-sm btn-info"
-                    onClick={() =>
-                      (window.location.href = `/transaction/${txn.id}`)
-                    }
+                    onClick={() => navigate(`/transaction/${txn.id}`)}
                   >
                     View Details
                   </button>
