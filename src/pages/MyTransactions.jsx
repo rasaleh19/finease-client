@@ -9,7 +9,14 @@ const MyTransactions = () => {
   const [loading, setLoading] = useState(true);
   const [editTxn, setEditTxn] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme") || "light";
+    setTheme(storedTheme);
+    document.documentElement.setAttribute("data-theme", storedTheme);
+  }, []);
 
   useEffect(() => {
     async function fetchTxns() {
@@ -147,7 +154,12 @@ const MyTransactions = () => {
 
                 <div className="txn-actions flex gap-2 mt-2">
                   <button
-                    className="btn btn-sm btn-outline"
+                    className={
+                      `btn btn-sm btn-outline` +
+                      (theme === "dark"
+                        ? " text-black border border-white bg-white hover:bg-gray-200"
+                        : "")
+                    }
                     onClick={() => handleEdit(txn)}
                   >
                     Update
