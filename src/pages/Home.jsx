@@ -19,13 +19,17 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Set default theme to light if not set
-    if (!localStorage.getItem("theme")) {
-      localStorage.setItem("theme", "light");
-    }
     const storedTheme = localStorage.getItem("theme") || "light";
     setTheme(storedTheme);
     document.documentElement.setAttribute("data-theme", storedTheme);
+  }, []);
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setTheme(localStorage.getItem("theme") || "light");
+    };
+    window.addEventListener("storage", handleThemeChange);
+    return () => window.removeEventListener("storage", handleThemeChange);
   }, []);
 
   useEffect(() => {
