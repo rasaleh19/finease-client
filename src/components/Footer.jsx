@@ -5,7 +5,11 @@ export default function Footer() {
     <footer className="footer bg-base-200 p-4 flex flex-col md:flex-row justify-between items-center mt-8">
       <div className="flex flex-col items-start gap-1 mb-2 md:mb-0">
         <div className="flex items-center gap-2">
-          <img src="/vite.svg" alt="FinEase Logo" className="h-6 w-6" />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png"
+            alt="FinEase Logo"
+            className="h-6 w-6"
+          />
           <span className="font-bold text-lg">FinEase</span>
         </div>
         <div className="text-sm text-gray-600">Contact: finease@gmail.com</div>
