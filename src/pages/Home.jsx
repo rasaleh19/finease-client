@@ -46,6 +46,11 @@ export default function Home() {
         <p className="tagline text-xl">
           Empower your financial future. Track, plan, and grow!
         </p>
+        <img
+          src="/expense.jpg"
+          alt="Finance Banner"
+          className="w-full max-h-72 object-cover rounded-xl mt-4 shadow"
+        />
       </section>
 
       {/* Overview Section */}
