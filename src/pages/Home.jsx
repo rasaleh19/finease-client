@@ -19,6 +19,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // Set default theme to light if not set
+    if (!localStorage.getItem("theme")) {
+      localStorage.setItem("theme", "light");
+    }
     const storedTheme = localStorage.getItem("theme") || "light";
     setTheme(storedTheme);
     document.documentElement.setAttribute("data-theme", storedTheme);
