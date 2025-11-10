@@ -73,7 +73,7 @@ const Signup = () => {
       const result = await googleSignIn();
       const user = result.user;
       // Store user profile in MongoDB
-      await fetch("https://fineaseserver.vercel.app/users", {
+      const response = await fetch("https://fineaseserver.vercel.app/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -83,7 +83,26 @@ const Signup = () => {
           provider: "google",
         }),
       });
-      toast.success("Google signup successful!");
+      if (response.status === 409) {
+        // User already exists, update user info in MongoDB
+        await fetch(
+          `https://fineaseserver.vercel.app/users/update-by-email/${user.email}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: user.displayName,
+              photoURL: user.photoURL,
+              provider: "google",
+            }),
+          }
+        );
+        toast.success("Google sign-in successful! Profile updated.");
+      } else if (response.ok) {
+        toast.success("Google signup successful!");
+      } else {
+        toast.error("Failed to store user profile.");
+      }
       navigate("/");
     } catch (err) {
       toast.error(err.message);
