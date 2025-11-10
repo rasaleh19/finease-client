@@ -27,14 +27,16 @@ const TransactionDetails = () => {
     async function fetchDetails() {
       try {
         // Fetch the specific transaction by _id
-        const res = await fetch(`http://localhost:3000/transactions/${id}`);
+        const res = await fetch(
+          `https://fineaseserver.vercel.app/transactions/${id}`
+        );
         if (!res.ok) throw new Error("Transaction not found");
         const data = await res.json();
         setTxn(data);
 
         // Fetch all transactions for this user (for total per category)
         const resAll = await fetch(
-          `http://localhost:3000/transactions?userId=${user.id}`
+          `https://fineaseserver.vercel.app/transactions?userId=${user.id}`
         );
         const allData = await resAll.json();
         setTransactions(allData);

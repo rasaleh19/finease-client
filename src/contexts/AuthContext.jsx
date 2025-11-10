@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
           // Fetch user from backend by email to get the id field
           try {
             const res = await fetch(
-              `http://localhost:3000/users?email=${currentUser.email}`
+              `https://fineaseserver.vercel.app/users?email=${currentUser.email}`
             );
             const users = await res.json();
             if (users && users.length > 0) {

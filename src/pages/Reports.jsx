@@ -31,7 +31,7 @@ const Reports = () => {
     async function fetchTxns() {
       if (!user) return setLoading(false);
       try {
-        let url = `http://localhost:3000/transactions?userId=${user.id}`;
+        let url = `https://fineaseserver.vercel.app/transactions?userId=${user.id}`;
         if (month) url += `&month=${month}`;
         const res = await fetch(url);
         const data = await res.json();

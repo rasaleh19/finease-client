@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
@@ -47,6 +47,17 @@ const Signup = () => {
         displayName: name,
         photoURL: photoURL || defaultPhotoURL,
       });
+      // Store user profile in MongoDB
+      await fetch("https://fineaseserver.vercel.app/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          photoURL: photoURL || defaultPhotoURL,
+          provider: "manual",
+        }),
+      });
       toast.success("Signup successful!");
       navigate("/");
     } catch (err) {
@@ -59,7 +70,19 @@ const Signup = () => {
   const handleGoogle = async () => {
     setLoading(true);
     try {
-      await googleSignIn();
+      const result = await googleSignIn();
+      const user = result.user;
+      // Store user profile in MongoDB
+      await fetch("https://fineaseserver.vercel.app/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          provider: "google",
+        }),
+      });
       toast.success("Google signup successful!");
       navigate("/");
     } catch (err) {

@@ -17,7 +17,7 @@ const Profile = () => {
       const firebaseUser = getAuth().currentUser;
       await updateProfile(firebaseUser, { displayName: name, photoURL });
       // Update backend user profile
-      await fetch(`http://localhost:3000/users/${user.id}`, {
+      await fetch(`https://fineaseserver.vercel.app/users/${user.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, photoURL }),

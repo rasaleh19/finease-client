@@ -22,7 +22,7 @@ const MyTransactions = () => {
   useEffect(() => {
     async function fetchTxns() {
       if (!user) return setLoading(false);
-      let fetchUrl = `http://localhost:3000/transactions?userId=${user.id}`;
+      let fetchUrl = `https://fineaseserver.vercel.app/transactions?userId=${user.id}`;
       fetchUrl += `&sortBy=${sortBy}&sortOrder=-1`;
       try {
         const res = await fetch(fetchUrl);
@@ -58,7 +58,7 @@ const MyTransactions = () => {
               toast.dismiss(t.id);
               try {
                 const res = await fetch(
-                  `http://localhost:3000/transactions/${id}`,
+                  `https://fineaseserver.vercel.app/transactions/${id}`,
                   {
                     method: "DELETE",
                   }
@@ -112,7 +112,7 @@ const MyTransactions = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/transactions/${editTxn.id}`,
+        `https://fineaseserver.vercel.app/transactions/${editTxn.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

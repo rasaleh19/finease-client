@@ -36,7 +36,9 @@ export default function Home() {
     async function fetchSummary() {
       if (!user) return setLoading(false);
       try {
-        const res = await fetch(`http://localhost:3000/summary/${user.id}`);
+        const res = await fetch(
+          `https://fineaseserver.vercel.app/summary/${user.id}`
+        );
         const data = await res.json();
         setSummary(data);
       } catch {
