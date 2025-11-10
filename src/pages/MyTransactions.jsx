@@ -10,6 +10,7 @@ const MyTransactions = () => {
   const [editTxn, setEditTxn] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [sortBy, setSortBy] = useState("date");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,55 +22,70 @@ const MyTransactions = () => {
   useEffect(() => {
     async function fetchTxns() {
       if (!user) return setLoading(false);
-
-      console.log("User object:", user);
-      console.log("User ID:", user.id);
-
-      const fetchUrl = `http://localhost:3000/transactions?userId=${user.id}`;
-      console.log("Fetch URL:", fetchUrl);
-
+      let fetchUrl = `http://localhost:3000/transactions?userId=${user.id}`;
+      fetchUrl += `&sortBy=${sortBy}&sortOrder=-1`;
       try {
         const res = await fetch(fetchUrl);
         if (!res.ok) {
-          console.log("Fetch error:", res.status, await res.text());
           setTransactions([]);
           return;
         }
         const data = await res.json();
-        // Always use id, fallback to _id for MongoDB
         const txns = data.map((t) => ({
           ...t,
           id: t.id || t._id?.toString(),
         }));
         setTransactions(txns);
       } catch (err) {
-        console.log("Fetch catch error:", err);
         setTransactions([]);
       } finally {
         setLoading(false);
       }
     }
-
     fetchTxns();
-  }, [user]);
+  }, [user, sortBy]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this transaction?"))
-      return;
-
-    try {
-      const res = await fetch(`http://localhost:3000/transactions/${id}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        setTransactions(transactions.filter((t) => t.id !== id));
-        toast.success("Transaction deleted!");
-      } else {
-        toast.error("Delete failed.");
-      }
-    } catch {
-      toast.error("Delete failed.");
-    }
+    // Use toast for confirmation instead of browser alert
+    toast(
+      (t) => (
+        <span>
+          Are you sure you want to delete this transaction?
+          <br />
+          <button
+            className="btn btn-sm btn-error mt-2"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const res = await fetch(
+                  `http://localhost:3000/transactions/${id}`,
+                  {
+                    method: "DELETE",
+                  }
+                );
+                if (res.ok) {
+                  setTransactions(transactions.filter((txn) => txn.id !== id));
+                  toast.success("Transaction deleted!");
+                } else {
+                  toast.error("Delete failed.");
+                }
+              } catch {
+                toast.error("Delete failed.");
+              }
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="btn btn-sm btn-outline ml-2 mt-2"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            No
+          </button>
+        </span>
+      ),
+      { duration: 8000 }
+    );
   };
 
   const handleEdit = (txn) => {
@@ -123,6 +139,20 @@ const MyTransactions = () => {
   return (
     <div className="transactions-container max-w-2xl mx-auto p-4 bg-white rounded shadow">
       <h2 className="text-xl font-bold mb-4 text-gray-800">My Transactions</h2>
+
+      <div className="flex gap-4 mb-4">
+        <label className="flex items-center gap-2">
+          <span>Sort by:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="select select-bordered"
+          >
+            <option value="date">Date (Newest First)</option>
+            <option value="amount">Amount (Highest First)</option>
+          </select>
+        </label>
+      </div>
 
       {loading ? (
         <div className="spinner">Loading...</div>
