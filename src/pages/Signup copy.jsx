@@ -51,12 +51,6 @@ const Signup = () => {
         photoURL: photoURL || defaultPhotoURL,
       });
 
-      // Force reload the user to get updated profile
-      await res.user.reload();
-
-      // Get the fresh token to ensure auth state is updated
-      await res.user.getIdToken(true);
-
       const response = await fetch("https://fineaseserver.vercel.app/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -84,20 +78,16 @@ const Signup = () => {
         );
         if (updateRes.ok) {
           toast.success("Signup successful! Profile updated.");
+          navigate("/");
         } else {
           toast.error("Failed to update user profile.");
         }
       } else if (response.ok) {
         toast.success("Signup successful!");
+        navigate("/");
       } else {
         toast.error("Failed to store user profile.");
       }
-
-      // Wait for auth state to propagate
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Force a page reload to ensure context is fresh
-      window.location.href = "/";
     } catch (err) {
       toast.error(err.message);
     } finally {
