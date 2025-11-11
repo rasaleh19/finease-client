@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   getAuth,
@@ -17,11 +17,20 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signupDone, setSignupDone] = useState(false); // <-- new
 
   const navigate = useNavigate();
   const authContext = useAuth() || {};
-  const { googleSignIn } = authContext;
+  const { googleSignIn, user, loading: authLoading } = authContext;
   const auth = getAuth();
+
+  // ---- wait for full user after signup ----
+  useEffect(() => {
+    if (signupDone && user && !authLoading) {
+      localStorage.removeItem("pendingAuthRedirect");
+      navigate("/", { replace: true });
+    }
+  }, [signupDone, user, authLoading, navigate]);
 
   const validatePassword = (pw) => {
     if (pw.length < 6) return "Password must be at least 6 characters.";
@@ -42,7 +51,6 @@ const Signup = () => {
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
       const defaultPhotoURL =
         "https://images.unsplash.com/photo-1506744038136-46273834b3fb";
 
@@ -63,7 +71,6 @@ const Signup = () => {
       });
 
       if (response.status === 409) {
-        // User already exists → Update user
         const updateRes = await fetch(
           `https://fineaseserver.vercel.app/users/update-by-email/${email}`,
           {
@@ -77,16 +84,18 @@ const Signup = () => {
           }
         );
         if (updateRes.ok) {
-          toast.success("Signup successful! Profile updated.");
-          navigate("/");
+          toast.success("Signup successful! Redirecting…");
+          setSignupDone(true);
+          localStorage.setItem("pendingAuthRedirect", "1");
         } else {
-          toast.error("Failed to update user profile.");
+          toast.error("Failed to update profile.");
         }
       } else if (response.ok) {
-        toast.success("Signup successful!");
-        navigate("/");
+        toast.success("Signup successful! Redirecting…");
+        setSignupDone(true);
+        localStorage.setItem("pendingAuthRedirect", "1");
       } else {
-        toast.error("Failed to store user profile.");
+        toast.error("Failed to store profile.");
       }
     } catch (err) {
       toast.error(err.message);
@@ -127,8 +136,9 @@ const Signup = () => {
         );
       }
 
-      toast.success("Google sign-in successful!");
-      navigate("/");
+      toast.success("Google sign-in successful! Redirecting…");
+      setSignupDone(true);
+      localStorage.setItem("pendingAuthRedirect", "1");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -147,6 +157,7 @@ const Signup = () => {
           Signup
         </h2>
 
+        {/* ----- inputs (unchanged) ----- */}
         <div className="mb-3">
           <label className="label text-gray-700">Name</label>
           <input
@@ -155,10 +166,8 @@ const Signup = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            autoComplete="off"
           />
         </div>
-
         <div className="mb-3">
           <label className="label text-gray-700">Email</label>
           <input
@@ -167,10 +176,8 @@ const Signup = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            autoComplete="off"
           />
         </div>
-
         <div className="mb-3">
           <label className="label text-gray-700">Photo URL</label>
           <input
@@ -178,11 +185,8 @@ const Signup = () => {
             className="input input-bordered w-full bg-gray-200 text-gray-900"
             value={photoURL}
             onChange={(e) => setPhotoURL(e.target.value)}
-            required
-            autoComplete="off"
           />
         </div>
-
         <div className="mb-3 relative">
           <label className="label text-gray-700">Password</label>
           <input
@@ -198,7 +202,7 @@ const Signup = () => {
             className="absolute right-2 top-9 text-xl"
             onClick={() => setShowPassword((v) => !v)}
           >
-            {showPassword ? <span>👁️</span> : <span>🙈</span>}
+            {showPassword ? "Hide" : "Show"}
           </button>
         </div>
 
