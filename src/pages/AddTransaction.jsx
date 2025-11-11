@@ -24,6 +24,7 @@ const AddTransaction = () => {
     e.preventDefault();
     setLoading(true);
     const form = e.target;
+    console.log("User context before transaction:", user); // Debug log
     const txn = {
       type: form.type.value,
       categoryId: form.categoryId.value,
