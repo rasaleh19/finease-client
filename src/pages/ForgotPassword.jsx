@@ -27,17 +27,17 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100">
+    <div className="flex items-center justify-center min-h-[80vh] bg-gray-100">
       <form
-        className="card w-full max-w-sm bg-base-200 shadow-xl p-6"
+        className="card w-full max-w-sm bg-white shadow-xl p-6"
         onSubmit={handleReset}
       >
         <h2 className="text-2xl font-bold mb-4 text-center">Reset Password</h2>
         <div className="mb-3">
-          <label className="label">Email</label>
+          <label className="label text-gray-700">Email</label>
           <input
             type="email"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full bg-gray-200 text-gray-900"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
