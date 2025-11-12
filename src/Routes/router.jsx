@@ -9,14 +9,21 @@ import Profile from "../pages/Profile";
 import TransactionDetails from "../pages/TransactionDetails";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AddTransaction from "../pages/AddTransaction";
-import Reports from "../pages/Reports";
+import Reports from "../pages/Reports"; // ✅ Add this import
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
     children: [
-      { path: "", element: <Home /> },
+      {
+        path: "",
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "profile",
         element: (
@@ -59,6 +66,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
