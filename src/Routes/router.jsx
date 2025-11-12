@@ -9,7 +9,7 @@ import Profile from "../pages/Profile";
 import TransactionDetails from "../pages/TransactionDetails";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AddTransaction from "../pages/AddTransaction";
-import Reports from "../pages/Reports"; // ✅ Add this import
+import Reports from "../pages/Reports";
 
 const router = createBrowserRouter([
   {
@@ -25,15 +25,40 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: "my-transactions", element: <MyTransactions /> },
-      { path: "transaction/:id", element: <TransactionDetails /> },
-      { path: "add-transaction", element: <AddTransaction /> },
-
-      // ✅ PUT REPORTS HERE
-      { path: "reports", element: <Reports /> },
+      {
+        path: "my-transactions",
+        element: (
+          <ProtectedRoute>
+            <MyTransactions />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "transaction/:id",
+        element: (
+          <ProtectedRoute>
+            <TransactionDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "add-transaction",
+        element: (
+          <ProtectedRoute>
+            <AddTransaction />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
-
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
