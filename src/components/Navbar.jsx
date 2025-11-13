@@ -68,7 +68,10 @@ export default function Navbar() {
           {/* User photo immediately after My Profile */}
           <div className="flex flex-col items-center group ml-2">
             <img
-              src={user.photoURL || "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+              src={
+                user.photoURL ||
+                "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+              }
               alt="avatar"
               className="w-10 h-10 rounded-full object-cover border border-base-300 aspect-square cursor-pointer"
               style={{ borderRadius: "50%" }}
@@ -162,7 +165,10 @@ export default function Navbar() {
             {user && (
               <div className="flex flex-col items-center mb-2">
                 <img
-                  src={user.photoURL || "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                  src={
+                    user.photoURL ||
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+                  }
                   alt="avatar"
                   className="w-12 h-12 rounded-full object-cover border border-base-300 aspect-square mb-1"
                   style={{ borderRadius: "50%" }}
