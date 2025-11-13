@@ -30,7 +30,7 @@ export default function Navbar() {
     <>
       <Link
         to="/"
-        className="btn btn-ghost min-w-[110px] justify-center"
+        className="btn btn-ghost justify-center"
         onClick={() => setMenuOpen(false)}
       >
         Home
@@ -39,46 +39,58 @@ export default function Navbar() {
         <>
           <Link
             to="/add-transaction"
-            className="btn btn-ghost min-w-[110px] justify-center"
+            className="btn btn-ghost justify-center"
             onClick={() => setMenuOpen(false)}
           >
             Add Transaction
           </Link>
           <Link
             to="/my-transactions"
-            className="btn btn-ghost min-w-[110px] justify-center"
+            className="btn btn-ghost justify-center"
             onClick={() => setMenuOpen(false)}
           >
             My Transactions
           </Link>
           <Link
             to="/reports"
-            className="btn btn-ghost min-w-[110px] justify-center"
+            className="btn btn-ghost justify-center"
             onClick={() => setMenuOpen(false)}
           >
             Reports
           </Link>
           <Link
             to="/profile"
-            className="btn btn-ghost min-w-[110px] justify-center"
+            className="btn btn-ghost justify-center"
             onClick={() => setMenuOpen(false)}
           >
             My Profile
           </Link>
+          {/* User photo immediately after My Profile */}
+          <div className="flex flex-col items-center group ml-2">
+            <img
+              src={user.photoURL || "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+              alt="avatar"
+              className="w-10 h-10 rounded-full object-cover border border-base-300 aspect-square cursor-pointer"
+              style={{ borderRadius: "50%" }}
+            />
+            <span className="text-xs font-semibold mt-1 text-gray-800 group-hover:block hidden bg-base-100 px-2 py-1 rounded shadow">
+              {user.displayName || user.email}
+            </span>
+          </div>
         </>
       )}
       {!user && (
         <>
           <Link
             to="/login"
-            className="btn btn-primary min-w-[110px] justify-center"
+            className="btn btn-primary justify-center"
             onClick={() => setMenuOpen(false)}
           >
             Login
           </Link>
           <Link
             to="/signup"
-            className="btn btn-outline min-w-[110px] justify-center"
+            className="btn btn-outline justify-center"
             onClick={() => setMenuOpen(false)}
           >
             Signup
@@ -87,7 +99,7 @@ export default function Navbar() {
       )}
       {user && (
         <button
-          className="btn btn-outline min-w-[110px] justify-center"
+          className="btn btn-outline justify-center"
           onClick={() => {
             setMenuOpen(false);
             handleLogout();
@@ -97,7 +109,7 @@ export default function Navbar() {
         </button>
       )}
       <button
-        className="btn btn-outline min-w-[110px] justify-center"
+        className="btn btn-outline justify-center"
         onClick={() => {
           toggleTheme();
           setMenuOpen(false);
@@ -119,9 +131,9 @@ export default function Navbar() {
         />
         <span className="font-bold text-xl">FinEase</span>
       </div>
-      {/* Desktop menu */}
-      <div className="hidden md:flex gap-2 items-center flex-wrap md:justify-end">
+      <div className="flex gap-2 items-center flex-wrap">
         {menuLinks}
+        {/* Removed user photo from here to avoid duplication */}
       </div>
       {/* Hamburger for mobile */}
       <div className="md:hidden flex items-center">
@@ -147,6 +159,19 @@ export default function Navbar() {
         </button>
         {menuOpen && (
           <div className="absolute top-full right-2 mt-2 w-64 bg-base-100 shadow-lg rounded-lg z-50 flex flex-col p-2 animate-fade-in">
+            {user && (
+              <div className="flex flex-col items-center mb-2">
+                <img
+                  src={user.photoURL || "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                  alt="avatar"
+                  className="w-12 h-12 rounded-full object-cover border border-base-300 aspect-square mb-1"
+                  style={{ borderRadius: "50%" }}
+                />
+                <span className="text-xs font-semibold text-gray-800">
+                  {user.displayName || user.email}
+                </span>
+              </div>
+            )}
             {menuLinks}
           </div>
         )}
