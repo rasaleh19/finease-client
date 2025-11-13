@@ -134,12 +134,12 @@ export default function Navbar() {
         />
         <span className="font-bold text-xl">FinEase</span>
       </div>
-      <div className="flex gap-2 items-center flex-wrap">
+      {/* Desktop menu: hidden on mobile, flex on md+ */}
+      <div className="hidden md:flex gap-2 items-center flex-wrap">
         {menuLinks}
-        {/* Removed user photo from here to avoid duplication */}
       </div>
-      {/* Hamburger for mobile */}
-      <div className="md:hidden flex items-center">
+      {/* Hamburger for mobile: flex on mobile, hidden on md+ */}
+      <div className="flex md:hidden items-center">
         <button
           className="btn btn-ghost btn-circle"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -162,22 +162,7 @@ export default function Navbar() {
         </button>
         {menuOpen && (
           <div className="absolute top-full right-2 mt-2 w-64 bg-base-100 shadow-lg rounded-lg z-50 flex flex-col p-2 animate-fade-in">
-            {user && (
-              <div className="flex flex-col items-center mb-2">
-                <img
-                  src={
-                    user.photoURL ||
-                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-                  }
-                  alt="avatar"
-                  className="w-12 h-12 rounded-full object-cover border border-base-300 aspect-square mb-1"
-                  style={{ borderRadius: "50%" }}
-                />
-                <span className="text-xs font-semibold text-gray-800">
-                  {user.displayName || user.email}
-                </span>
-              </div>
-            )}
+            {/* Only render menuLinks, remove user photo duplication */}
             {menuLinks}
           </div>
         )}
