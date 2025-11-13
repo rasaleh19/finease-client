@@ -11,6 +11,7 @@ import {
   BarElement,
 } from "chart.js";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 ChartJS.register(
   ArcElement,
@@ -33,9 +34,8 @@ const Reports = () => {
       try {
         let url = `https://fineaseserver.vercel.app/transactions?userId=${user.id}`;
         if (month) url += `&month=${month}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        setTransactions(data);
+        const res = await axios.get(url);
+        setTransactions(res.data);
       } catch (err) {
         console.error(err);
         toast.error("Failed to fetch transactions");

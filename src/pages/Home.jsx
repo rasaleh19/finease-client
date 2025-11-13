@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 
 export default function Home() {
   const { user } = useContext(AuthContext);
@@ -36,11 +37,10 @@ export default function Home() {
     async function fetchSummary() {
       if (!user) return setLoading(false);
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `https://fineaseserver.vercel.app/summary/${user.id}`
         );
-        const data = await res.json();
-        setSummary(data);
+        setSummary(res.data);
       } catch {
         setSummary({
           totalBalance: 0,

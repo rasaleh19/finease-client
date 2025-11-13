@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const AddTransaction = () => {
   const { user } = useContext(AuthContext);
@@ -10,9 +11,10 @@ const AddTransaction = () => {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("https://fineaseserver.vercel.app/categories");
-        const data = await res.json();
-        setCategories(data);
+        const res = await axios.get(
+          "https://fineaseserver.vercel.app/categories"
+        );
+        setCategories(res.data);
       } catch {
         setCategories([]);
       }
@@ -37,12 +39,11 @@ const AddTransaction = () => {
       createdAt: new Date().toISOString(),
     };
     try {
-      const res = await fetch("https://fineaseserver.vercel.app/transactions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(txn),
-      });
-      if (res.ok) {
+      const res = await axios.post(
+        "https://fineaseserver.vercel.app/transactions",
+        txn
+      );
+      if (res.status === 200 || res.status === 201) {
         toast.success("Transaction added!");
         form.reset();
       } else {

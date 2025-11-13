@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import axios from "axios";
 
 const TransactionDetails = () => {
   const { user, loading: userLoading } = useContext(AuthContext);
@@ -27,18 +28,17 @@ const TransactionDetails = () => {
     async function fetchDetails() {
       try {
         // Fetch the specific transaction by _id
-        const res = await fetch(
+        const res = await axios.get(
           `https://fineaseserver.vercel.app/transactions/${id}`
         );
-        if (!res.ok) throw new Error("Transaction not found");
-        const data = await res.json();
+        const data = res.data;
         setTxn(data);
 
         // Fetch all transactions for this user (for total per category)
-        const resAll = await fetch(
+        const resAll = await axios.get(
           `https://fineaseserver.vercel.app/transactions?userId=${user.id}`
         );
-        const allData = await resAll.json();
+        const allData = resAll.data;
         setTransactions(allData);
       } catch (err) {
         console.error(err);

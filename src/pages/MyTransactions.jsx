@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MyTransactions = () => {
   const { user } = useContext(AuthContext);
@@ -25,12 +26,8 @@ const MyTransactions = () => {
       let fetchUrl = `https://fineaseserver.vercel.app/transactions?userId=${user.id}`;
       fetchUrl += `&sortBy=${sortBy}&sortOrder=-1`;
       try {
-        const res = await fetch(fetchUrl);
-        if (!res.ok) {
-          setTransactions([]);
-          return;
-        }
-        const data = await res.json();
+        const res = await axios.get(fetchUrl);
+        const data = res.data;
         const txns = data.map((t) => ({
           ...t,
           id: t.id || t._id?.toString(),
@@ -57,13 +54,10 @@ const MyTransactions = () => {
             onClick={async () => {
               toast.dismiss(t.id);
               try {
-                const res = await fetch(
-                  `https://fineaseserver.vercel.app/transactions/${id}`,
-                  {
-                    method: "DELETE",
-                  }
+                const res = await axios.delete(
+                  `https://fineaseserver.vercel.app/transactions/${id}`
                 );
-                if (res.ok) {
+                if (res.status === 200) {
                   setTransactions(transactions.filter((txn) => txn.id !== id));
                   toast.success("Transaction deleted!");
                 } else {
@@ -111,16 +105,11 @@ const MyTransactions = () => {
     };
 
     try {
-      const res = await fetch(
+      const res = await axios.put(
         `https://fineaseserver.vercel.app/transactions/${editTxn.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updated),
-        }
+        updated
       );
-
-      if (res.ok) {
+      if (res.status === 200) {
         setTransactions(
           transactions.map((t) =>
             t.id === editTxn.id ? { ...t, ...updated } : t
